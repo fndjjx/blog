@@ -1,0 +1,86 @@
+{% extends "bootstrap/base.html"  %}
+
+{% block title %}Flask{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+body {
+    background-color: white;
+    /*background-image: url(./static/1.jpg)*/
+}
+.jumbotron {
+    background-image: url(./static/1.jpg);
+    background-size: cover
+}
+</style>
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">SDS</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content%}
+
+<div class="jumbotron">
+  <div class="container">
+  <h1>Hello, world!</h1>
+  <p>...</p>
+  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+  </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+        <pre> 
+    class f:
+        adas
+            fasf
+        </pre>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+        <div class="row">
+            <div class="col-md-5 center-block">
+                <h2>HTML5 and JS Apps</h2>
+                <p class="lead">jjjjj</p>
+                <p class="text-info">你大爷</p>
+                <pre>class d(): \n 
+    dgfg
+                    </pre>
+                <h1 class="text-hide">Custom heading</h1>
+                <table class="table table-bordered">
+<tr>
+<td>Row 1, cell 1</td>
+<td>Row 1, cell 2</td>
+</tr>
+<tr>
+<td>Row 1, cell 1</td>
+<td>Row 1, cell 2</td>
+</tr>
+</table>
+<input class="btn btn-default" type="submit" value="Submit">
+            </div>
+            <div class="col-md-5">
+                <h2>Ruby Apps</h2>
+                <img src="static/1.jpg"  class="img-responsive" class="img-rounded">
+                <img src="static/1.jpg"  class="img-responsive" class="img-circle">
+               
+            </div>
+            <div class="col-md-2">
+                <h2>PHP MySQL Apps</h2>
+                <kbd><kbd>ctrl</kbd> + <kbd>
+            </div>
+        </div>
+</div>
+
+{% endblock %}
+

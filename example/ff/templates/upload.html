@@ -1,0 +1,35 @@
+{% extends "bootstrap/base.html"  %}
+
+{% block title %}Flask{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+body {background-color: #A8A8A8}
+</style>
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">SDS</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content%}
+<div class="container">
+        <div class="row">
+            <div class="col-md-12 center-block">
+                <h2>Upload success</h2>
+                <img src="/static/12.jpg">
+                <form method="POST" enctype="multipart/form-data">
+                    <button type="submit" class="btn btn-primary btn-lg">process</button>
+                </form>
+            </div>
+        </div>
+</div>
+
+{% endblock %}
+
