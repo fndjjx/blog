@@ -1,15 +1,40 @@
-{% extends "bootstrap/base.html" %}
-{%block content%}
-<div class="container">
-        <div class="row">
-            <div class="col-md-5">
+{% extends "base.html" %}
+{%block title%}
+home
 
-{% if name=="kk"%}
-    <h1>Hello {{name|capitalize}}</h1>
-{%else%}
-    <h1>Hello</h1>
-{%endif%}
-</div>
-</div>
+{%endblock%}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+.kk {
+    border-width: 2px;
+    border-style: solid;
+    margin-left: 80px;
+}
+</style>
+{%endblock%}
+
+{%block content%}
+{{super()}}
+<div class="row">
+    <div class="col-md-9 kk">
+        <embed src="//music.163.com/style/swf/widget.swf?sid=34338112&type=2&auto=1&width=320&height=66" width="340" height="86"  allowNetworking="all"></embed>
+        {%for post in posts.items%}
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{post.title}}</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {{post.text}}
+                <a href="{{url_for('post',post_id=post.id)}}">readmore</a>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+
 </div>
 {%endblock%}
