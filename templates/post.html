@@ -29,14 +29,17 @@
     <div class="row">
 
       <div class="col-md-8 main">
-          <div class="body">
-              <h1>{{post.title}}</h1>
-              {% if post.html_text %}
-                {{post.html_text|safe}} 
-              {% else %}
-                {{post.text}}
-              {%endif%}
-          </div>
+        <div class="body">
+           <h1>{{post.title}}</h1>
+           {% if post.html_text %}
+             {{post.html_text|safe}} 
+           {% else %}
+             {{post.text}}
+           {%endif%}
+  
+           <a href="{{url_for("edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
+             
+        </div>
       </div>
 
       <div class="col-md-3 sidebar">

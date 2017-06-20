@@ -39,8 +39,8 @@ def post(post_id):
     
     return render_template("post.html", post=post, sidebar=sidebar)
 
-@app.route("/edit", methods=['GET', 'POST'])
-def edit():
+@app.route("/add", methods=['GET', 'POST'])
+def add_article():
     form = articleForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -49,6 +49,21 @@ def edit():
         flash('新文章已添加: {}'.format(title))
         return redirect(url_for('post', post_id=id))
     return render_template("edit.html", form=form)
+
+@app.route("/edit/<int:post_id>", methods=['GET', 'POST'])
+def edit_article(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = articleForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+        id = save_to_database(title, content)
+        flash('文章已修改: {}'.format(title))
+        return redirect(url_for('post', post_id=id))
+    form.content.data = post.text
+    form.title.data = post.title
+    return render_template("edit.html", form=form)
+
 
 
 #form
@@ -99,14 +114,17 @@ class Post(db.Model):
         html_text = markdown(value, output_format='html')
         target.html_text = html_text
 
-def save_to_database(title, content):
-    posts = Post.query.all()
-    ids = [post.id for post in posts]
-    if len(ids)>0:
-        ids.sort()
-        current_id = ids[-1] + 1
+def save_to_database(title, content, post_id=None):
+    if post_id:
+        current_id = post_id
     else:
-        current_id = 1
+        posts = Post.query.all()
+        ids = [post.id for post in posts]
+        if len(ids)>0:
+            ids.sort()
+            current_id = ids[-1] + 1
+        else:
+            current_id = 1
 
     post = Post(title)
     post.text = content
