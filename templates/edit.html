@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf%}
+
+{% block scripts %}
+  {{super()}}
+  {{pagedown.include_pagedown()}}
+{%endblock%}
+
+{%block title%}blog{%endblock%}
+
+{% block head %}
+  {{ super() }}
+    <style type="text/css">
+      .main {
+          border-width: 2px;
+          margin: 5px 5px 5px 5px;
+      }
+  </style>
+{%endblock%}
+
+
+{%block content%}
+  {{super()}}
+
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-8 main">
+          <div class="row">
+            {{wtf.quick_form(form)}}
+          </div>
+      </div>
+
+    </div>
+  </div>
+{%endblock%}
