@@ -11,7 +11,9 @@ from flask.ext.pagedown import PageDown
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField
 from flask.ext.pagedown.fields import PageDownField
 from markdown import markdown
+from markdown import Markdown
 import bleach
+import misaka as m
 
 from flask.ext.login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 
@@ -146,8 +148,13 @@ class Post(db.Model):
         #allowed_tags=['a','ul','strong','p','h1','h2','h3', 'img', 'alt', 'src']
         #html_text = bleach.linkify(bleach.clean(
         #    markdown(value, output_format='html'), tags=allowed_tags, strip=True))
-        html_text = markdown(value, output_format='html')
-        target.html_text = html_text
+        #html_text = markdown(value, output_format='html')
+        myexts = ['extra', 'abbr', 'attr_list', 'def_list', 'fenced_code', 'footnotes', 'tables', 
+                  'smart_strong', 'admonition', 'codehilite', 'headerid', 'meta', 'nl2br', 
+                  'sane_lists', 'smarty', 'toc', 'mathjax']
+
+        md = Markdown(extensions=myexts)
+        target.html_text = md.convert(value)
 
 def save_to_database(title, content, post_id=None):
     if post_id:

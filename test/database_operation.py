@@ -539,3 +539,4 @@ def delete_all_data():
 
 if __name__ == "__main__":
     delete_all_data()
+    add_data()
