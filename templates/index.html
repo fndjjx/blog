@@ -13,6 +13,10 @@
           border-width: 2px;
           margin: 5px 5px 5px 5px;
       }
+
+      .body {
+          background-image: url(http://static.blog.csdn.net/skin/dark1/images/body_bg.jpg);
+      }
   </style>
 
 {%endblock%}
@@ -20,7 +24,7 @@
 
 {%block content%}
   {{super()}}
-  <div class="container-fluid">
+  <div class="container-fluid body">
     <div class="row">
 
       <div class="col-md-8 main">
