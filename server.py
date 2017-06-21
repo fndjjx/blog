@@ -1,6 +1,6 @@
 #coding:utf-8
 import time
-from flask import Flask, url_for, redirect, flash
+from flask import Flask, url_for, redirect, flash, request
 from config import DevConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import func
@@ -8,10 +8,12 @@ from flask import Flask, render_template
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.wtf import Form
 from flask.ext.pagedown import PageDown
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField
 from flask.ext.pagedown.fields import PageDownField
 from markdown import markdown
 import bleach
+
+from flask.ext.login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 
 
 app = Flask(__name__)
@@ -19,6 +21,9 @@ app.config.from_object(DevConfig)
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 pagedown = PageDown(app)
+login_manager = LoginManager(app)
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'login'
 
 #view
 def sidebar_data():
@@ -27,6 +32,7 @@ def sidebar_data():
 
 @app.route("/")
 def index():
+    print(current_user)
     posts = Post.query.all()
     sidebar = sidebar_data()
     return render_template("index.html", posts=posts, sidebar=sidebar)
@@ -40,8 +46,9 @@ def post(post_id):
     return render_template("post.html", post=post, sidebar=sidebar)
 
 @app.route("/add", methods=['GET', 'POST'])
+@login_required
 def add_article():
-    form = articleForm()
+    form = ArticleForm()
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
@@ -51,9 +58,10 @@ def add_article():
     return render_template("edit.html", form=form)
 
 @app.route("/edit/<int:post_id>", methods=['GET', 'POST'])
+@login_required
 def edit_article(post_id):
     post = Post.query.get_or_404(post_id)
-    form = articleForm()
+    form = ArticleForm()
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
@@ -64,18 +72,45 @@ def edit_article(post_id):
     form.title.data = post.title
     return render_template("edit.html", form=form)
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        user = User.query.filter_by(username=username).first()
+        if user:
+            login_user(user) 
+            print(current_user)
+            return redirect(request.args.get('next') or url_for('index'))
+        flash("Invalid user")
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You logout')
+    return redirect(url_for('index'))
+
 
 
 #form
-class articleForm(Form):
+class ArticleForm(Form):
     title = StringField()
     #content = TextAreaField()
     content = PageDownField()
     submit = SubmitField('提交')
 
 
+class LoginForm(Form):
+    username = StringField("Name")
+    password = PasswordField("Password")
+    submit = SubmitField('提交')
+
+
+
 #model
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(255))
     password = db.Column(db.String(255))
@@ -134,6 +169,10 @@ def save_to_database(title, content, post_id=None):
     db.session.add(post) 
     db.session.commit()
     return current_id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 db.event.listen(Post.text, 'set', Post.on_changed_text)
 

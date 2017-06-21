@@ -31,6 +31,15 @@
       <div class="navbar-header">
         <a class="navbar-brand" href="/">首页</a>
         <a class="navbar-brand" href={{url_for('add_article')}}>编辑</a>
+        <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('logout')}}">登出</a></li>
+            <li><a>{{current_user.username}}</a></li>
+          {% else %}
+            <li><a href="{{url_for('login')}}">登入</a></li>
+          {% endif%}
+        </ul>
+
       </div>
     </div>
   </div>
