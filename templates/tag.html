@@ -17,46 +17,30 @@
           border-width: 2px;
           margin: 5px 5px 5px 5px;
       }
-   
+
       .body {
-          padding: 5px 5px 5px 5px;
-          margin: 5px 5px 5px 5px;
-          overflow: hidden;
-      }
-      .back {
           background-image: url(http://static.blog.csdn.net/skin/dark1/images/body_bg.jpg);
       }
   </style>
+
 {%endblock%}
 
 
 {%block content%}
   {{super()}}
-  <div class="container-fluid back">
+  <div class="container-fluid body">
     <div class="row">
 
-      <div class="col-md-8 main">
-        <div class="body min-height">
-          <div class="panel panel-default min-height">
-            <div class="panel-title"><h1>{{post.title}}</h1></div>
+      <div class="col-md-8 main min-height">
+        {%for post in posts%}
+          <div class="panel panel-default">
+            <div class="panel-title">{{post.title}}</div>
             <div class="panel-body">
-              {% if post.tag %}
-                {% for tag in post.tag.split(" ") %}
-                  <span class="badge">{{tag}}</span></a>
-                {% endfor %}
-              {% endif %}
-
-              {% if post.html_text %}
-                {{post.html_text|safe}} 
-              {% else %}
-                {{post.text}}
-              {%endif%}
+              <p>{{post.text|truncate(10)}}</p>
+              <a href="{{url_for('post',post_id=post.id)}}">readmore</a>
             </div>
           </div>
-  
-           <a href="{{url_for("edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
-             
-        </div>
+        {%endfor%}
       </div>
 
       <div class="col-md-3 sidebar">
@@ -79,7 +63,7 @@
           <div class="panel-body">
             {%for tag in sidebar_tag%}
               <div class="row">
-                <a href="{{url_for('tag',tag=tag)}}">{{tag}}</a>
+                <a href="{{url_for('tag',tag=tag)}}">{{tag}}</a>  
               </div>
             {%endfor%}
           </div>

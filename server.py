@@ -31,20 +31,43 @@ def sidebar_data():
     recent = Post.query.order_by(Post.publish_date.desc()).limit(5).all()
     return recent
 
+def sidebar_tag_data():
+    all_tag = Post.query.with_entities(Post.tag).all()
+    all_tag_pair_list = []
+    for tag_pair in all_tag:
+        all_tag_pair_list.extend(tag_pair)
+    all_tag_pair_list = list(filter(lambda x:x, all_tag_pair_list))
+    all_tag_list = []
+    for tag_pair in all_tag_pair_list:
+        all_tag_list.extend(tag_pair.split(" "))
+    all_tag_list = list(set(all_tag_list))
+    print(all_tag_list)
+   
+    return all_tag_list
+
 @app.route("/")
 def index():
     print(current_user)
     posts = Post.query.all()
     sidebar = sidebar_data()
-    return render_template("index.html", posts=posts, sidebar=sidebar)
+    sidebar_tag = sidebar_tag_data()
+    return render_template("index.html", posts=posts, sidebar=sidebar, sidebar_tag=sidebar_tag)
+
+@app.route("/tag/<tag>")
+def tag(tag):
+    posts = Post.query.filter(Post.tag.like("%"+tag+"%")).all()
+    sidebar = sidebar_data()
+    sidebar_tag = sidebar_tag_data()
+    return render_template("tag.html", posts=posts, sidebar=sidebar, sidebar_tag=sidebar_tag)
 
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     print(post.html_text)
     sidebar = sidebar_data()
+    sidebar_tag = sidebar_tag_data()
     
-    return render_template("post.html", post=post, sidebar=sidebar)
+    return render_template("post.html", post=post, sidebar=sidebar, sidebar_tag=sidebar_tag)
 
 @app.route("/add", methods=['GET', 'POST'])
 @login_required
@@ -53,7 +76,8 @@ def add_article():
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
-        id = save_to_database(title, content) 
+        tag = form.tag.data
+        id = save_to_database(title, content, tag) 
         flash('新文章已添加: {}'.format(title))
         return redirect(url_for('post', post_id=id))
     return render_template("edit.html", form=form)
@@ -66,11 +90,13 @@ def edit_article(post_id):
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
-        id = save_to_database(title, content)
+        tag = form.tag.data
+        id = save_to_database(title, content, tag, post_id)
         flash('文章已修改: {}'.format(title))
         return redirect(url_for('post', post_id=id))
     form.content.data = post.text
     form.title.data = post.title
+    form.tag.data = post.tag
     return render_template("edit.html", form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -98,6 +124,7 @@ def logout():
 #form
 class ArticleForm(Form):
     title = StringField()
+    tag = StringField()
     #content = TextAreaField()
     content = PageDownField()
     submit = SubmitField('提交')
@@ -131,6 +158,7 @@ class User(db.Model, UserMixin):
 class Post(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(255))
+    tag = db.Column(db.String(255))
     text = db.Column(db.Text())
     publish_date = db.Column(db.DateTime())
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
@@ -155,7 +183,7 @@ class Post(db.Model):
         md = Markdown(extensions=myexts)
         target.html_text = md.convert(value)
 
-def save_to_database(title, content, post_id=None):
+def save_to_database(title, content, tag, post_id=None):
     if post_id:
         current_id = post_id
     else:
@@ -171,6 +199,7 @@ def save_to_database(title, content, post_id=None):
     post.text = content
     post.publish_date = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     post.id = current_id
+    post.tag = tag
 
     db.session.add(post) 
     db.session.commit()
