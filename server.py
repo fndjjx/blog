@@ -13,7 +13,6 @@ from flask.ext.pagedown.fields import PageDownField
 from markdown import markdown
 from markdown import Markdown
 import bleach
-import misaka as m
 
 from flask.ext.login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 
@@ -151,7 +150,7 @@ class Post(db.Model):
         #html_text = markdown(value, output_format='html')
         myexts = ['extra', 'abbr', 'attr_list', 'def_list', 'fenced_code', 'footnotes', 'tables', 
                   'smart_strong', 'admonition', 'codehilite', 'headerid', 'meta', 'nl2br', 
-                  'sane_lists', 'smarty', 'toc', 'mathjax']
+                  'sane_lists', 'smarty', 'toc', 'mdx_math']
 
         md = Markdown(extensions=myexts)
         target.html_text = md.convert(value)

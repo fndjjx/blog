@@ -19,23 +19,31 @@
           margin: 5px 5px 5px 5px;
           overflow: hidden;
       }
+      .back {
+          background-image: url(http://static.blog.csdn.net/skin/dark1/images/body_bg.jpg);
+      }
   </style>
 {%endblock%}
 
 
 {%block content%}
   {{super()}}
-  <div class="container">
+  <div class="container-fluid back">
     <div class="row">
 
       <div class="col-md-8 main">
         <div class="body">
-           <h1>{{post.title}}</h1>
-           {% if post.html_text %}
-             {{post.html_text|safe}} 
-           {% else %}
-             {{post.text}}
-           {%endif%}
+          <div class="panel panel-default">
+            <div class="panel-title">{{post.title}}</div>
+            <div class="panel-body">
+
+              {% if post.html_text %}
+                {{post.html_text|safe}} 
+              {% else %}
+                {{post.text}}
+              {%endif%}
+            </div>
+          </div>
   
            <a href="{{url_for("edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
              
@@ -43,12 +51,16 @@
       </div>
 
       <div class="col-md-3 sidebar">
-        {%for post in sidebar%}
-          <div class="row">
-              <h1>{{post.title}}</h1>
-              <a href="{{url_for('post',post_id=post.id)}}">readmore</a>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            {%for post in sidebar%}
+              <div class="row">
+                  <h1>{{post.title}}</h1>
+                  <a href="{{url_for('post',post_id=post.id)}}">readmore</a>
+              </div>
+            {%endfor%}
           </div>
-        {%endfor%}
+        </div>
       </div>
 
     </div>
