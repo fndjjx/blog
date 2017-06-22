@@ -26,6 +26,7 @@
       .back {
           background-image: url(http://static.blog.csdn.net/skin/dark1/images/body_bg.jpg);
       }
+
   </style>
 {%endblock%}
 
@@ -63,11 +64,11 @@
 
       <div class="col-md-3 sidebar">
         <div class="panel panel-default">
-          <h1>最近的文章</h1>
+          <h2>最近的文章</h2>
           <div class="panel-body">
             {%for post in sidebar%}
               <div class="row">
-                  <h1>{{post.title}}</h1>
+                  <h4>{{post.title}}</h4>
                   <a href="{{url_for('post',post_id=post.id)}}">readmore</a>
               </div>
             {%endfor%}
@@ -77,7 +78,7 @@
 
       <div class="col-md-3 sidebar">
         <div class="panel panel-default">
-          <h1>标签</h1>
+          <h2>标签</h2>
           <div class="panel-body">
             {%for tag in sidebar_tag%}
               <div class="row">

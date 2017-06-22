@@ -186,6 +186,7 @@ class Post(db.Model):
 def save_to_database(title, content, tag, post_id=None):
     if post_id:
         current_id = post_id
+        post = Post.query.filter_by(id=current_id).first()
     else:
         posts = Post.query.all()
         ids = [post.id for post in posts]
@@ -195,7 +196,7 @@ def save_to_database(title, content, tag, post_id=None):
         else:
             current_id = 1
 
-    post = Post(title)
+        post = Post(title)
     post.text = content
     post.publish_date = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     post.id = current_id
