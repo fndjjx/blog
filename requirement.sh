@@ -1,4 +1,5 @@
 sudo apt-get install supervisor
+pip install fabric3
 pip install flask-sqlalchemy
 pip install flask-login
 pip install flask-bootstrap
