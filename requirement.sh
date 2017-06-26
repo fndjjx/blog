@@ -3,7 +3,6 @@ pip install fabric3
 pip install flask-sqlalchemy
 pip install flask-login
 pip install flask-bootstrap
-pip install flask-wtform
 pip install flask-wtf
 pip install flask-pagedown
 pip install flask-markdown
