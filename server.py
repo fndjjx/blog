@@ -197,6 +197,7 @@ def save_to_database(title, content, tag, post_id=None):
             current_id = 1
 
         post = Post(title)
+    post.title = title
     post.text = content
     post.publish_date = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     post.id = current_id
