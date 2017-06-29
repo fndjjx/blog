@@ -28,19 +28,7 @@
       }
 
   </style>
-  <script type="text/javascript">
-    $(document).ready(function() {
-        $("#delete").click(function(event) {
-            if(confirm("是否删除")){
-                $.post("/delete/"+this.value, [], function(response){
-                    //alert(response)
-                    //alert($.parseJSON(response).status)
-                    location.href = $.parseJSON(response).location;
-                })
-            }
-        })
-      })
-  </script>
+
 {%endblock%}
 
 
@@ -106,4 +94,39 @@
 
     </div>
   </div>
+{%endblock%}
+
+
+{%block scripts%}
+  {{super()}}
+  <script type="text/javascript">
+    $(document).ready(function() {
+        //$("#delete").click(function(event) {
+        //    if(confirm("是否删除")){
+        //        $.post("/delete/"+this.value, [], function(response){
+        //            //alert(response)
+        //            //alert($.parseJSON(response).status)
+        //            location.href = $.parseJSON(response).location;
+        //        })
+        //    }
+        //})
+      $("#delete").confirm({
+        title: '删除确认',
+        content: '是否删除？',
+        buttons: {
+          confirm: function () {
+            post_id = this.$target.attr('value')
+            $.post("/delete/"+post_id, [], function(response){
+                //alert(response)
+                //alert($.parseJSON(response).status)
+                location.href = $.parseJSON(response).location;
+            })
+          },
+          cancel: function () {
+            $.alert('取消删除!');
+          },
+        }
+      });
+    })
+  </script>
 {%endblock%}
