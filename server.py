@@ -13,6 +13,7 @@ from flask.ext.pagedown.fields import PageDownField
 from markdown import markdown
 from markdown import Markdown
 import bleach
+import json
 
 from flask.ext.login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 
@@ -46,6 +47,7 @@ def sidebar_tag_data():
     return all_tag_list
 
 @app.route("/")
+@app.route("/index")
 def index():
     print(current_user)
     posts = Post.query.all()
@@ -98,6 +100,16 @@ def edit_article(post_id):
     form.title.data = post.title
     form.tag.data = post.tag
     return render_template("edit.html", form=form)
+
+@app.route("/delete/<int:post_id>", methods=['GET', 'POST'])
+@login_required
+def delete_article(post_id):
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    flash('文章已删除')
+    return json.dumps({"status": 302, "location": "/index"})
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

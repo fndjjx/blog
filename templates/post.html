@@ -28,6 +28,19 @@
       }
 
   </style>
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $("#delete").click(function(event) {
+            if(confirm("是否删除")){
+                $.post("/delete/"+this.value, [], function(response){
+                    //alert(response)
+                    //alert($.parseJSON(response).status)
+                    location.href = $.parseJSON(response).location;
+                })
+            }
+        })
+      })
+  </script>
 {%endblock%}
 
 
@@ -57,7 +70,7 @@
             </div>
           </div>
             <a href="{{url_for("edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
-             
+            <button  type="button" class="btn btn-primary" id="delete" value={{post.id}}>Delete</button>
         </div>
       </div>
 
