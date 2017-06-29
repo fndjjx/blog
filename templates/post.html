@@ -69,8 +69,10 @@
               <span class="badge pull-right">编辑时间 {{post.publish_date}}</span>
             </div>
           </div>
-            <a href="{{url_for("edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
-            <button  type="button" class="btn btn-primary" id="delete" value={{post.id}}>Delete</button>
+            {% if current_user.is_authenticated %}
+              <a href="{{url_for("edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
+              <button  type="button" class="btn btn-primary" id="delete" value={{post.id}}>Delete</button>
+            {% endif %}
         </div>
       </div>
 
