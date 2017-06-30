@@ -10,11 +10,15 @@
 
 {% block head %}
   {{ super() }}
-    <style type="text/css">
+  <style type="text/css">
       .main {
           border-width: 2px;
           margin: 5px 5px 5px 5px;
       }
+      textarea.postcontent {
+          height: 500px;
+      }
+
   </style>
 {%endblock%}
 
@@ -26,9 +30,32 @@
     <div class="row">
 
       <div class="col-md-8 main">
-          <div class="row">
-            {{wtf.quick_form(form)}}
+        <form method="post" class="form" role="form">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            <label>标题</label>
+            {{ form.title(class="form-control") }}
+            {% for error in form.errors.title %}
+              <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
           </div>
+          <div class="form-group">
+            <label>标签</label>
+            {{ form.tag(class="form-control") }}
+            {% for error in form.errors.tag %}
+              <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            <label">正文</label>
+            {{ form.content(class="form-control postcontent") }}
+            {% for error in form.errors.content %}
+              <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+          </div>
+          <button  type="submit" class="btn btn-primary">提交</button>
+        </form>
+
       </div>
 
     </div>
