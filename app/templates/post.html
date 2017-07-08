@@ -58,7 +58,7 @@
             </div>
           </div>
             {% if current_user.is_authenticated %}
-              <a href="{{url_for("edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
+              <a href="{{url_for("main.edit_article", post_id=post.id)}}"><button  type="button" class="btn btn-primary">Edit</button></a>
               <button  type="button" class="btn btn-primary" id="delete" value={{post.id}}>Delete</button>
             {% endif %}
         </div>
@@ -71,7 +71,7 @@
             {%for post in sidebar%}
               <div class="row">
                   <h4>{{post.title}}</h4>
-                  <a href="{{url_for('post',post_id=post.id)}}">readmore</a>
+                  <a href="{{url_for('main.post',post_id=post.id)}}">readmore</a>
               </div>
             {%endfor%}
           </div>
@@ -84,7 +84,7 @@
           <div class="panel-body">
             {%for tag in sidebar_tag%}
               <div class="row">
-                <a href="{{url_for('tag',tag=tag)}}">{{tag}}</a>
+                <a href="{{url_for('main.tag',tag=tag)}}">{{tag}}</a>
               </div>
             {%endfor%}
           </div>
